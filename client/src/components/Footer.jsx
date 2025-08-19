@@ -10,23 +10,25 @@ const Footer = () => {
       <div className="px-4 sm:px-20 xl:px-32 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo and Company Info */}
-          <div className="col-span-1 md:col-span-4 flex justify-between items-start">
-            <div
-              className="flex gap-2 items-center cursor-pointer"
-              onClick={() => navigate("/")}
-            >
-              <img
-                src={assets.logo}
-                className="h-8 w-auto transition-transform hover:scale-105"
-                alt="Zebra AI logo"
-              />
-              <h2 className="text-2xl font-bold">Zebra AI</h2>
-            </div>
+          <div className="col-span-1 md:col-span-4">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-8">
+              <div
+                className="flex gap-2 items-center cursor-pointer"
+                onClick={() => navigate("/")}
+              >
+                <img
+                  src={assets.logo}
+                  className="h-8 w-auto transition-transform hover:scale-105"
+                  alt="Zebra AI logo"
+                />
+                <h2 className="text-2xl font-bold">Zebra AI</h2>
+              </div>
 
-            <p className="text-gray-300 max-w-md text-right">
-              Leverage the power of AI to generate high-quality content
-              effortlessly. Create amazing content with our suite of AI tools.
-            </p>
+              <p className="text-gray-300 max-w-md text-left sm:text-right">
+                Leverage the power of AI to generate high-quality content
+                effortlessly. Create amazing content with our suite of AI tools.
+              </p>
+            </div>
           </div>
         </div>
 
