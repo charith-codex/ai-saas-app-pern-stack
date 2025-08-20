@@ -118,30 +118,30 @@ export const generateImage = async (req, res) => {
     }
 
     // // Generate image from HuggingFace
-    // const imageResponse = await client.textToImage({
-    //   provider: "fal-ai",
-    //   model: "Qwen/Qwen-Image",
-    //   inputs: prompt,
-    //   parameters: { num_inference_steps: 15 },
-    // });
+    const imageResponse = await client.textToImage({
+      provider: "fal-ai",
+      model: "Qwen/Qwen-Image",
+      inputs: prompt,
+      parameters: { num_inference_steps: 15 },
+    });
 
-    // const arrayBuffer = await imageResponse.arrayBuffer();
-    // const buffer = Buffer.from(arrayBuffer);
+    const arrayBuffer = await imageResponse.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
     // Google Imagen 
     //*********************************************/
-    const image = await AI.images.generate({
-      model: "imagen-3.0-generate-002",
-      prompt: prompt,
-      response_format: "b64_json",
-      n: 1,
-    });
+    // const image = await AI.images.generate({
+    //   model: "imagen-3.0-generate-002",
+    //   prompt: prompt,
+    //   response_format: "b64_json",
+    //   n: 1,
+    // });
 
-    const imageData = image.data;
+    // const imageData = image.data;
 
-    // imageResponse is a Blob, convert to Buffer
-    const arrayBuffer = await imageData.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    // // imageResponse is a Blob, convert to Buffer
+    // const arrayBuffer = await imageData.arrayBuffer();
+    // const buffer = Buffer.from(arrayBuffer);
     //*********************************************/
 
     // Upload buffer to Cloudinary
