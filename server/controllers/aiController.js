@@ -78,7 +78,7 @@ export const generateBlogTitle = async (req, res) => {
       messages: [
         {
           role: "user",
-          content: `${prompt} - Generate 5 blog titles for this topic.`,
+          content: prompt,
         },
       ],
       temperature: 0.7,
@@ -117,17 +117,32 @@ export const generateImage = async (req, res) => {
       });
     }
 
-    // Generate image from HuggingFace
-    const imageResponse = await client.textToImage({
-      provider: "fal-ai",
-      model: "Qwen/Qwen-Image",
-      inputs: prompt,
-      parameters: { num_inference_steps: 15 },
+    // // Generate image from HuggingFace
+    // const imageResponse = await client.textToImage({
+    //   provider: "fal-ai",
+    //   model: "Qwen/Qwen-Image",
+    //   inputs: prompt,
+    //   parameters: { num_inference_steps: 15 },
+    // });
+
+    // const arrayBuffer = await imageResponse.arrayBuffer();
+    // const buffer = Buffer.from(arrayBuffer);
+
+    // Google Imagen 
+    //*********************************************/
+    const image = await AI.images.generate({
+      model: "imagen-3.0-generate-002",
+      prompt: prompt,
+      response_format: "b64_json",
+      n: 1,
     });
 
+    const imageData = image.data;
+
     // imageResponse is a Blob, convert to Buffer
-    const arrayBuffer = await imageResponse.arrayBuffer();
+    const arrayBuffer = await imageData.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+    //*********************************************/
 
     // Upload buffer to Cloudinary
     const uploadResult = await cloudinary.uploader.upload_stream(
@@ -154,7 +169,7 @@ export const generateImage = async (req, res) => {
 export const removeImageBackground = async (req, res) => {
   try {
     const { userId } = req.auth();
-    const { image } = req.file;
+    const image = req.file;
     const plan = req.plan;
 
     if (plan !== "premium") {
@@ -186,7 +201,7 @@ export const removeImageObject = async (req, res) => {
   try {
     const { userId } = req.auth();
     const { object } = req.body;
-    const { image } = req.file;
+    const image = req.file;
     const plan = req.plan;
 
     if (plan !== "premium") {
@@ -235,9 +250,7 @@ export const reviewResume = async (req, res) => {
     const dataBuffer = fs.readFileSync(resume.path);
     const pdfData = await pdf(dataBuffer);
 
-    const prompt = `Review the following resume and provide constructive
-    feedback on its strengths, weaknesses, and areas for improvement. Resume
-    Content : \n\n${pdfData.text}`;
+    const prompt = `Review the following resume and provide a structured evaluation. Break feedback into three sections: (2) Strengths, (3) Weaknesses, and (3) Areas for Improvement and Overall ATS Score. Keep the response concise (under 800 tokens), focusing only on the most impactful points. Resume Content: \n\n${pdfData.text}`;
 
     const response = await AI.chat.completions.create({
       model: "gemini-2.0-flash",

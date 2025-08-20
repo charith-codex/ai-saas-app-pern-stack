@@ -8,7 +8,7 @@ import {
   reviewResume,
 } from "../controllers/aiController.js";
 import { auth } from "../middlewares/auth.js";
-import { upload } from "@/configs/multer.js";
+import { upload } from "../configs/multer.js";
 
 const aiRouter = express.Router();
 
